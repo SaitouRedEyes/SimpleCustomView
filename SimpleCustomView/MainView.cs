@@ -15,6 +15,8 @@ namespace SimpleCustomView
         private int greenX;
 
         private Paint green;
+        private bool isMoving;
+        private bool isMovingLeft;
 
         public MainView(Context context) : base(context)
         {
@@ -35,6 +37,7 @@ namespace SimpleCustomView
         {
             c = context;
             isUpdating = true;
+            isMoving = false;
 
             green = new Paint();
             green.SetARGB(255, 0, 255, 0);
@@ -55,7 +58,31 @@ namespace SimpleCustomView
         private void OnUpdate()
         {
             //Aqui atualizado meus objetos
-            greenX += 2;
+            if(isMoving)
+            {
+                if(isMovingLeft == true)
+                {
+                    greenX -= 2;
+                }
+                else
+                {
+                    greenX += 2;
+                }
+            }
+        }
+
+        public override bool OnTouchEvent(MotionEvent e)
+        {
+            if (e.Action == MotionEventActions.Down ||
+               e.Action == MotionEventActions.Move)
+            {
+                isMoving = true;
+                isMovingLeft = greenX > e.RawX; // x = true || false
+            }
+            else if (e.Action == MotionEventActions.Up)
+                isMoving = false;
+
+            return true;
         }
 
         public void Run()
