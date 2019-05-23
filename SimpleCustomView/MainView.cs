@@ -53,6 +53,7 @@ namespace SimpleCustomView
 
             //Aqui desenho meus objetos
             canvas.DrawRect(greenX, 100, 50 + greenX, 50, green);
+            canvas.DrawRect(300, 600, 350, 650, green);
         }
 
         private void OnUpdate()
