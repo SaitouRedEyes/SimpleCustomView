@@ -4,6 +4,7 @@ using Android.OS;
 using Android.Util;
 using Android.Views;
 using Java.Lang;
+using XamarinSimpleCustomView;
 
 namespace SimpleCustomView
 {
@@ -18,17 +19,11 @@ namespace SimpleCustomView
         private bool isMoving;
         private bool isMovingLeft;
 
+        private int screenW, screenH;
+
+        private Bitmap ball;
+
         public MainView(Context context) : base(context)
-        {
-            Initialize(context);
-        }
-
-        public MainView(Context context, IAttributeSet attrs) : base(context, attrs)
-        {
-            Initialize(context);
-        }
-
-        public MainView(Context context, IAttributeSet attrs, int defStyle) : base(context, attrs, defStyle)
         {
             Initialize(context);
         }
@@ -37,11 +32,16 @@ namespace SimpleCustomView
         {
             c = context;
             isUpdating = true;
-            isMoving = false;
+            isMoving = true;
+
+            screenW = context.Resources.DisplayMetrics.WidthPixels;
+            screenH = context.Resources.DisplayMetrics.HeightPixels;
 
             green = new Paint();
             green.SetARGB(255, 0, 255, 0);
             greenX = 100;
+
+            ball = BitmapFactory.DecodeResource(Resources, Resource.Drawable.ball);            
 
             handler = new Handler();
             handler.Post(this);
@@ -54,6 +54,7 @@ namespace SimpleCustomView
             //Aqui desenho meus objetos
             canvas.DrawRect(greenX, 100, 50 + greenX, 50, green);
             canvas.DrawRect(300, 600, 350, 650, green);
+            canvas.DrawBitmap(ball, 100, 100, green);
         }
 
         private void OnUpdate()
@@ -63,25 +64,28 @@ namespace SimpleCustomView
             {
                 if(isMovingLeft == true)
                 {
-                    greenX -= 2;
+                    greenX -= 10;
                 }
                 else
                 {
-                    greenX += 2;
+                    greenX += 10;
                 }
+
+                if (greenX + 50 > screenW) isMovingLeft = true;
+                else if(greenX < 0) isMovingLeft = false;
             }
         }
 
         public override bool OnTouchEvent(MotionEvent e)
         {
-            if (e.Action == MotionEventActions.Down ||
+            /*if (e.Action == MotionEventActions.Down ||
                e.Action == MotionEventActions.Move)
             {
                 isMoving = true;
                 isMovingLeft = greenX > e.RawX; // x = true || false
             }
             else if (e.Action == MotionEventActions.Up)
-                isMoving = false;
+                isMoving = false;*/
 
             return true;
         }
@@ -94,7 +98,7 @@ namespace SimpleCustomView
 
                 OnUpdate();
                 this.Invalidate();
-            }
+            }            
         }
     }
 }

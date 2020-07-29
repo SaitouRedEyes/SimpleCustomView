@@ -3,6 +3,7 @@ using Android.OS;
 using Android.Support.V7.App;
 using Android.Runtime;
 using Android.Widget;
+using Android;
 
 namespace SimpleCustomView
 {
@@ -13,7 +14,8 @@ namespace SimpleCustomView
         {
             base.OnCreate(savedInstanceState);
             // Set our view from the "main" layout resource
-            SetContentView(new MainView(this));
+            SetContentView(new MainView(this));            
+            
         }
     }
 }
